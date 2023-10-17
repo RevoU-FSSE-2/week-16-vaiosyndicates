@@ -46,3 +46,17 @@ export const checkUserbyEmail = async (data) => {
   }
 }
 
+export const resetPassword = async (data) => {
+  const updateUser = await prisma.user.update({
+    where: {
+      id: data.id,
+      email: data.email
+    },
+    data: {
+      password: data.password,
+    },
+  })
+
+  return respHelper(200)
+}
+
