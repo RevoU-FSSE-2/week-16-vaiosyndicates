@@ -4,7 +4,16 @@ import { respHelper } from '../../util/index.js'
 const prisma = new PrismaClient()
 
 export const getUser = async () => {
-  const users = await prisma.user.findMany()
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      address: true,
+      role: true
+    },
+  })
+
   return users
 }
 
