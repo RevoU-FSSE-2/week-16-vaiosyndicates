@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import { checkUserbyEmail, getUser, postUser } from "../../model/User/index.js"
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import { generateAccessToken } from '../../util/index.js';
+import { generateAccessToken, generateRefreshToken } from '../../util/index.js';
 dotenv.config()
 
 export const testFetch = async (req, res) => {
@@ -84,6 +84,26 @@ export const loginUser = async (req, res) => {
       });
     }
 
+  } catch (error) {
+    res.status(500).json({
+      responseCode: 500,
+      message: error.message,
+    });
+  }
+}
+
+export const reqRefreshToken = async (req, res) => {
+  const { email } = req.body
+  try {
+    const checkUser = await checkUserbyEmail(email)
+    const token = generateRefreshToken(checkUser)
+    res.status(200).json({
+      responseCode: 200,
+      message: 'Refresh success',
+      data: {
+        token: token
+      }
+    })
   } catch (error) {
     res.status(500).json({
       responseCode: 500,
