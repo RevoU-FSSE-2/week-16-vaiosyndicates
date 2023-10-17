@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { respHelper } from '../util/index.js'
+import { respHelper } from '../../util/index.js'
 
 const prisma = new PrismaClient()
 
@@ -32,6 +32,8 @@ export const checkUserbyEmail = async (data) => {
 
   if(user !== null) {
     return respHelper(200, user)
+  } else {
+    return respHelper(404)
   }
 }
 

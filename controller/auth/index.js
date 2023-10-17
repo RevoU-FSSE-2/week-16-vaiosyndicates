@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt'
-import { checkUserbyEmail, getUser, postUser } from "../../model/index.js"
+import { checkUserbyEmail, getUser, postUser } from "../../model/User/index.js"
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
+import { generateAccessToken } from '../../util/index.js';
 dotenv.config()
 
 export const testFetch = async (req, res) => {
@@ -62,7 +63,7 @@ export const loginUser = async (req, res) => {
     if(checkUser !== null) {
       const checkpw = await bcrypt.compare(password, checkUser.data.password)
       if(checkpw) {
-        const token = jwt.sign({id: checkUser.data.id ,name: checkUser.data.name, role: checkUser.data.role}, process.env.SECRET_JWT)
+        const token = generateAccessToken(checkUser)
         res.status(200).json({
           responseCode: 200,
           message: 'Login success',
